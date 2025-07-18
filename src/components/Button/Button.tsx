@@ -31,19 +31,18 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const getButtonClasses = () => {
       const classes = [styles.button];
 
-      // Добавляем класс размера
+      // класс размера
       classes.push(styles[size]);
 
-      // Добавляем класс варианта отображения
+      // класс варианта отображения
       classes.push(styles[variant]);
 
-      // Добавляем класс цвета (комбинируем variant + color)
+      // класс цвета (комбинируем variant + color)
       const colorClass = `${variant}${color.charAt(0).toUpperCase() + color.slice(1)}`;
       if (styles[colorClass]) {
         classes.push(styles[colorClass]);
       }
 
-      // Добавляем пользовательский className если передан
       if (className) {
         classes.push(className);
       }
@@ -64,7 +63,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   }
 );
 
-// Устанавливаем displayName для лучшей отладки в React DevTools
 Button.displayName = 'Button';
 
 export default Button;
