@@ -1,7 +1,11 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = (env, argv) => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default (env, argv) => {
   const isProduction = argv.mode === 'production';
 
   return {
@@ -39,7 +43,7 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.module\.(scss|sass|css)$/,
+          test: /\.module\.(css)$/,
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             {
@@ -50,19 +54,17 @@ module.exports = (env, argv) => {
                     ? '[hash:base64:8]'
                     : '[name]__[local]__[hash:base64:5]',
                 },
-                importLoaders: 2,
+                importLoaders: 1,
               },
             },
-            'sass-loader',
           ],
         },
         {
-          test: /\.(scss|sass|css)$/,
-          exclude: /\.module\.(scss|sass|css)$/,
+          test: /\.css$/,
+          exclude: /\.module\.css$/,
           use: [
             isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
             'css-loader',
-            'sass-loader',
           ],
         },
       ],
