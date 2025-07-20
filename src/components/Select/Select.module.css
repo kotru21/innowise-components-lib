@@ -193,10 +193,6 @@
   padding: 8.5px 14px;
 }
 
-.outlined:hover {
-  border-color: rgba(0, 0, 0, 0.87);
-}
-
 .outlinedFocused {
   border-color: #1976d2;
   border-width: 2px;
@@ -232,10 +228,6 @@
   padding: 20px 12px 5px;
 }
 
-.filled:hover {
-  background-color: rgba(0, 0, 0, 0.09);
-}
-
 .filledFocused {
   background-color: rgba(0, 0, 0, 0.09);
   border-bottom-color: #1976d2;
@@ -268,10 +260,6 @@
 
 .standardSmall {
   padding: 2px 0 4px;
-}
-
-.standard:hover {
-  border-bottom-color: rgba(0, 0, 0, 0.87);
 }
 
 .standardFocused {

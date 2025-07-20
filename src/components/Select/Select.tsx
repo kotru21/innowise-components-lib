@@ -172,17 +172,17 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     }, [isOpen]);
 
     const handleFocus = useCallback(
-      (event: React.FocusEvent<HTMLSelectElement>) => {
+      (event: React.FocusEvent<HTMLElement>) => {
         setFocused(true);
-        onFocus?.(event);
+        onFocus?.(event as React.FocusEvent<HTMLSelectElement>);
       },
       [onFocus]
     );
 
     const handleBlur = useCallback(
-      (event: React.FocusEvent<HTMLSelectElement>) => {
+      (event: React.FocusEvent<HTMLElement>) => {
         setFocused(false);
-        onBlur?.(event);
+        onBlur?.(event as React.FocusEvent<HTMLSelectElement>);
       },
       [onBlur]
     );
@@ -434,6 +434,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           <div
             className={selectClasses}
             onClick={handleToggle}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             role="combobox"
             aria-expanded={isOpen}
             aria-haspopup="listbox"
