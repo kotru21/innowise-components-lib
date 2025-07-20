@@ -188,3 +188,44 @@ export const AllVariants: Story = {
     </div>
   ),
 };
+
+export const T: Story = {
+  args: {
+    children: 'Button',
+    variant: 'text',
+    size: 'small',
+    color: 'error',
+  },
+
+  render: () => (
+    <div
+      style={{
+        display: 'flex',
+        gap: '1rem',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+        }}
+      >
+        <Button variant="contained">Contained</Button>
+        <Button variant="outlined">Outlined</Button>
+        <Button variant="text">Text</Button>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          gap: '1rem',
+        }}
+      >
+        <Button size="small">Small</Button>
+        <Button size="medium">Medium</Button>
+        <Button size="large">Large</Button>
+      </div>
+    </div>
+  ),
+};
