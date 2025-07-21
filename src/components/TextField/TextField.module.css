@@ -60,15 +60,35 @@
   margin-left: -4px;
 }
 
+/* Для маленького outlined варианта в shrunk состоянии */
+.outlined .labelSmall.labelShrunk {
+  transform: translate(14px, -9px) scale(0.75);
+  background-color: white;
+  padding: 0 4px;
+  margin-left: -4px;
+}
+
 /* Для filled варианта лейбл остается внутри заполненной зоны */
 .filled .labelShrunk {
   transform: translate(14px, 4px) scale(0.75);
   background-color: transparent;
 }
 
+/* Для маленького filled варианта в shrunk состоянии */
+.filled .labelSmall.labelShrunk {
+  transform: translate(14px, -2px) scale(0.75);
+  background-color: transparent;
+}
+
 /* Для standard варианта простое поднятие */
 .standard .labelShrunk {
   transform: translate(14px, -6px) scale(0.75);
+  background-color: transparent;
+}
+
+/* Для маленького standard варианта в shrunk состоянии */
+.standard .labelSmall.labelShrunk {
+  transform: translate(14px, -9px) scale(0.75);
   background-color: transparent;
 }
 
@@ -196,6 +216,7 @@
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+  padding-top: 0.8rem;
 }
 
 .filled:hover {
