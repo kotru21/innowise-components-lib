@@ -1,6 +1,5 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
+const storybook = require("eslint-plugin-storybook");
 const typescript = require('@typescript-eslint/eslint-plugin');
 const typescriptParser = require('@typescript-eslint/parser');
 
@@ -33,6 +32,24 @@ module.exports = [
       'no-undef': 'off', // TypeScript handles this
       'no-console': 'warn',
       'prefer-const': 'error',
+    },
+  },
+  // Storybook configuration
+  {
+    files: ['**/*.stories.{js,jsx,ts,tsx}'],
+    plugins: {
+      storybook: storybook,
+    },
+    rules: {
+      'storybook/await-interactions': 'error',
+      'storybook/context-in-play-function': 'error',
+      'storybook/default-exports': 'error',
+      'storybook/hierarchy-separator': 'error',
+      'storybook/no-redundant-story-name': 'error',
+      'storybook/prefer-pascal-case': 'error',
+      'storybook/story-exports': 'error',
+      'storybook/use-storybook-expect': 'error',
+      'storybook/use-storybook-testing-library': 'error',
     },
   },
 ];
