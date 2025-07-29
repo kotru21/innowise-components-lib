@@ -115,27 +115,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
      * Функция для рендеринга иконки
      */
     const renderIcon = () => {
-      if (indeterminate && indeterminateIcon) {
-        return indeterminateIcon;
+      if (indeterminate) {
+        return indeterminateIcon || <IndeterminateIcon />;
       }
 
-      if (indeterminate && !indeterminateIcon) {
-        return <IndeterminateIcon />;
+      if (checked) {
+        return checkedIcon || <CheckIcon />;
       }
 
-      if (checked && checkedIcon) {
-        return checkedIcon;
-      }
-
-      if (checked && !checkedIcon) {
-        return <CheckIcon />;
-      }
-
-      if (icon) {
-        return icon;
-      }
-
-      return null;
+      return icon || null;
     };
 
     const checkboxId =
