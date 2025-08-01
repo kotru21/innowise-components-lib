@@ -15,9 +15,46 @@ A modern React components library inspired by Material-UI, built with TypeScript
 
 ## Installation
 
+> **Note**: This package is not yet published to npm. To use this library, you'll need to build it locally or publish it to npm first.
+
+For local development, clone the repository and build the library:
+
+```bash
+git clone <repository-url>
+cd innowise-components-lib
+npm install
+npm run build
+```
+
+Once published to npm, you can install it with:
+
 ```bash
 npm install innowise-components-lib
 ```
+
+### Publishing to npm
+
+To publish this library to npm:
+
+1. **Build the library**:
+
+```bash
+npm run build
+```
+
+2. **Login to npm** (if not already logged in):
+
+```bash
+npm login
+```
+
+3. **Publish the package**:
+
+```bash
+npm publish
+```
+
+> **Important**: Make sure to update the version number in `package.json` before publishing updates using `npm version patch|minor|major`.
 
 ## Quick Start
 
@@ -222,6 +259,59 @@ npm run storybook
 # Build Storybook for deployment
 npm run build-storybook
 ```
+
+## Publishing & Release
+
+### Before Publishing
+
+Before publishing to npm, make sure to:
+
+1. **Update version number** in `package.json`:
+
+```bash
+# For bug fixes
+npm version patch
+
+# For new features
+npm version minor
+
+# For breaking changes
+npm version major
+```
+
+2. **Build and test** the library:
+
+```bash
+npm run build
+npm test
+npm run lint
+```
+
+3. **Test the build** by checking the `dist` folder contents
+
+### Publishing Process
+
+1. **Ensure you're logged in to npm**:
+
+```bash
+npm whoami
+# If not logged in, run: npm login
+```
+
+2. **Publish to npm**:
+
+```bash
+npm publish
+```
+
+### Updating Published Package
+
+When updating an already published package:
+
+1. Make your changes
+2. Update version number: `npm version patch|minor|major`
+3. Build and test: `npm run build && npm test`
+4. Publish: `npm publish`
 
 ## Contributing
 
