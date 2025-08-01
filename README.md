@@ -16,7 +16,7 @@ A modern React components library inspired by Material-UI, built with TypeScript
 ## Installation
 
 ```bash
-npm i
+npm install innowise-components-lib
 ```
 
 ## Quick Start
