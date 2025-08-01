@@ -16,15 +16,7 @@ A modern React components library inspired by Material-UI, built with TypeScript
 ## Installation
 
 ```bash
-npm install innowise-components-lib
-```
-
-### Peer Dependencies
-
-Make sure you have the following peer dependencies installed:
-
-```bash
-npm install react@>=16.8.0 react-dom@>=16.8.0
+npm i
 ```
 
 ## Quick Start
