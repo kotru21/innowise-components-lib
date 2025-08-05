@@ -55,6 +55,7 @@ export default (env, argv) => {
                     : '[name]__[local]__[hash:base64:5]',
                 },
                 importLoaders: 1,
+                esModule: false,
               },
             },
           ],
