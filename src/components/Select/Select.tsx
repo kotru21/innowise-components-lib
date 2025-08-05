@@ -207,6 +207,12 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
                 e.preventDefault();
                 handleToggle();
               }
+              if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!isOpen) {
+                  handleOpen();
+                }
+              }
               if (e.key === 'Escape' && isOpen) {
                 handleClose();
               }

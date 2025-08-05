@@ -17,7 +17,27 @@ export default {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.module\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
-  collectCoverageFrom: ['src/**/*.(ts|tsx)', '!src/**/*.d.ts', '!src/index.ts'],
+  collectCoverageFrom: [
+    'src/**/*.(ts|tsx)',
+    '!src/**/*.d.ts',
+    '!src/index.ts',
+    '!src/**/*.stories.(ts|tsx)',
+    '!src/stories/**/*',
+  ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+  // Оптимизация для CI
+  maxWorkers: '50%',
+  testTimeout: 10000,
+  verbose: false,
+  silent: false,
+  bail: 1, // Остановка на первом падении теста в CI
 };

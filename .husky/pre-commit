@@ -1,1 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Форматирование и линтинг через lint-staged
 npx lint-staged
+
+# Запуск всех тестов для проверки целостности
+echo "Запуск всех тестов..."
+npm run test -- --passWithNoTests
+
+echo "✅ Все проверки pre-commit завершены успешно!"

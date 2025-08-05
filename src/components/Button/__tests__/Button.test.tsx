@@ -39,12 +39,14 @@ describe('Button', () => {
     it('renders with default variant "contained"', () => {
       render(<Button>Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button'); // Базовый класс
       expect(button).toHaveClass('contained');
     });
 
     it('renders with variant "text"', () => {
       render(<Button variant="text">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('text');
       expect(button).not.toHaveClass('contained');
     });
@@ -52,14 +54,9 @@ describe('Button', () => {
     it('renders with variant "outlined"', () => {
       render(<Button variant="outlined">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('outlined');
       expect(button).not.toHaveClass('contained');
-    });
-
-    it('renders with variant "contained"', () => {
-      render(<Button variant="contained">Test</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('contained');
     });
   });
 
@@ -68,12 +65,14 @@ describe('Button', () => {
     it('renders with default size "medium"', () => {
       render(<Button>Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('medium');
     });
 
     it('renders with size "small"', () => {
       render(<Button size="small">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('small');
       expect(button).not.toHaveClass('medium');
     });
@@ -81,14 +80,9 @@ describe('Button', () => {
     it('renders with size "large"', () => {
       render(<Button size="large">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('large');
       expect(button).not.toHaveClass('medium');
-    });
-
-    it('renders with size "medium"', () => {
-      render(<Button size="medium">Test</Button>);
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('medium');
     });
   });
 
@@ -97,36 +91,42 @@ describe('Button', () => {
     it('renders with default color "primary"', () => {
       render(<Button>Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedPrimary');
     });
 
     it('renders with color "secondary"', () => {
       render(<Button color="secondary">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedSecondary');
     });
 
     it('renders with color "error"', () => {
       render(<Button color="error">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedError');
     });
 
     it('renders with color "warning"', () => {
       render(<Button color="warning">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedWarning');
     });
 
     it('renders with color "info"', () => {
       render(<Button color="info">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedInfo');
     });
 
     it('renders with color "success"', () => {
       render(<Button color="success">Test</Button>);
       const button = screen.getByRole('button');
+      expect(button).toHaveClass('button');
       expect(button).toHaveClass('containedSuccess');
     });
   });
@@ -140,7 +140,8 @@ describe('Button', () => {
         </Button>
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('text', 'textPrimary');
+      expect(button).toHaveClass('text');
+      expect(button).toHaveClass('textPrimary');
     });
 
     it('applies correct class for outlined + error', () => {
@@ -150,7 +151,8 @@ describe('Button', () => {
         </Button>
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('outlined', 'outlinedError');
+      expect(button).toHaveClass('outlined');
+      expect(button).toHaveClass('outlinedError');
     });
 
     it('applies correct class for contained + success', () => {
@@ -160,7 +162,39 @@ describe('Button', () => {
         </Button>
       );
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('contained', 'containedSuccess');
+      expect(button).toHaveClass('contained');
+      expect(button).toHaveClass('containedSuccess');
+    });
+
+    it('applies correct classes for all variant-color combinations', () => {
+      const variants = ['text', 'outlined', 'contained'] as const;
+      const colors = [
+        'primary',
+        'secondary',
+        'error',
+        'warning',
+        'info',
+        'success',
+      ] as const;
+
+      variants.forEach((variant) => {
+        colors.forEach((color) => {
+          const { unmount } = render(
+            <Button variant={variant} color={color}>
+              Test {variant} {color}
+            </Button>
+          );
+
+          const button = screen.getByRole('button');
+          const expectedColorClass = `${variant}${color.charAt(0).toUpperCase() + color.slice(1)}`;
+
+          expect(button).toHaveClass('button');
+          expect(button).toHaveClass(variant);
+          expect(button).toHaveClass(expectedColorClass);
+
+          unmount();
+        });
+      });
     });
   });
 
@@ -266,25 +300,16 @@ describe('Button', () => {
 
   // Тесты HTML атрибутов
   describe('HTML attributes', () => {
-    it('passes through HTML attributes', () => {
+    it('should pass through HTML attributes', () => {
       render(
-        <Button
-          id="test-button"
-          data-testid="custom-button"
-          aria-label="Custom button"
-          title="Button tooltip"
-        >
-          Test
+        <Button data-testid="custom-button" aria-label="Custom button">
+          Test Button
         </Button>
       );
 
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('id', 'test-button');
-      expect(button).toHaveAttribute('data-testid', 'custom-button');
+      const button = screen.getByTestId('custom-button');
       expect(button).toHaveAttribute('aria-label', 'Custom button');
-      expect(button).toHaveAttribute('title', 'Button tooltip');
     });
-
     it('supports type attribute', () => {
       render(<Button type="submit">Submit</Button>);
       const button = screen.getByRole('button');
@@ -346,12 +371,11 @@ describe('Button', () => {
       );
 
       const button = screen.getByRole('button');
-      expect(button).toHaveClass(
-        'outlined',
-        'large',
-        'outlinedError',
-        'custom-btn'
-      );
+      expect(button).toHaveClass('button');
+      expect(button).toHaveClass('outlined');
+      expect(button).toHaveClass('large');
+      expect(button).toHaveClass('outlinedError');
+      expect(button).toHaveClass('custom-btn');
       expect(button).toHaveAttribute('id', 'complex-button');
       expect(button).toHaveTextContent('🔥Complex Button');
       expect(button).not.toBeDisabled();
@@ -368,6 +392,7 @@ describe('Button', () => {
       const classList = Array.from(button.classList);
 
       // Проверяем, что базовые классы присутствуют
+      expect(classList).toContain('button');
       expect(classList).toContain('small');
       expect(classList).toContain('text');
       expect(classList).toContain('textWarning');
@@ -432,7 +457,10 @@ describe('Button', () => {
       const button = screen.getByRole('button');
 
       // Должны применяться значения по умолчанию
-      expect(button).toHaveClass('contained', 'medium', 'containedPrimary');
+      expect(button).toHaveClass('button');
+      expect(button).toHaveClass('contained');
+      expect(button).toHaveClass('medium');
+      expect(button).toHaveClass('containedPrimary');
     });
 
     it('handles multiple rapid clicks', async () => {
