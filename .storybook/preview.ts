@@ -8,9 +8,24 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
+      exclude: [
+        'BackdropComponent',
+        'BackdropProps',
+        'container',
+        'onEnter',
+        'onExited',
+      ],
     },
     docs: {
       toc: true, // Включаем оглавление
+      extractComponentDescription: (component: any, { notes }: any) => {
+        if (notes) {
+          return typeof notes === 'string'
+            ? notes
+            : notes.markdown || notes.text;
+        }
+        return null;
+      },
     },
   },
   globalTypes: {

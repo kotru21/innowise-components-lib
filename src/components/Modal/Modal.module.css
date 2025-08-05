@@ -16,6 +16,25 @@
   visibility: hidden;
 }
 
+/* Modal without backdrop - doesn't block interactions */
+.modal--no-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1300;
+  pointer-events: none; /* Allows interactions with content behind */
+  outline: 0;
+  display: block; /* Don't use flex centering */
+}
+
+.modal--no-backdrop .content {
+  display: block; /* Override flex display */
+  max-width: none;
+  max-height: none;
+}
+
 /* Backdrop */
 .backdrop {
   position: fixed;
@@ -45,6 +64,7 @@
   max-width: 100%;
   max-height: 100%;
   outline: 0;
+  pointer-events: auto; /* Restore pointer events for modal content */
 
   /* Анимация появления */
   opacity: 1;

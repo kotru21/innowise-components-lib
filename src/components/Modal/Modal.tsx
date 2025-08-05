@@ -191,7 +191,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
 
       const modalClasses = [
-        styles.modal,
+        backdrop === false ? styles['modal--no-backdrop'] : styles.modal,
         !open && styles['modal--hidden'],
         className,
       ]

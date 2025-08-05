@@ -1,4 +1,4 @@
-import { ReactNode, HTMLAttributes } from 'react';
+import { ReactNode, HTMLAttributes, ElementType } from 'react';
 
 export interface ModalProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'onClose'> {
@@ -93,7 +93,7 @@ export interface ModalProps
   /**
    * Компонент для backdrop (по умолчанию div)
    */
-  BackdropComponent?: React.ElementType;
+  BackdropComponent?: ElementType;
 
   /**
    * Пропсы для компонента backdrop

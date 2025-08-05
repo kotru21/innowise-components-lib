@@ -27,6 +27,10 @@ Modal компонент - базовое модальное окно для с�
   },
   tags: ['autodocs'],
   argTypes: {
+    children: {
+      control: false,
+      description: 'Содержимое модального окна',
+    },
     open: {
       control: 'boolean',
       description: 'Показывает или скрывает модальное окно',
@@ -68,6 +72,26 @@ Modal компонент - базовое модальное окно для с�
       control: 'boolean',
       description: 'Отключить использование портала (для SSR)',
     },
+    className: {
+      control: 'text',
+      description: 'Дополнительный CSS класс для модального окна',
+    },
+    backdropClassName: {
+      control: 'text',
+      description: 'Дополнительный CSS класс для backdrop',
+    },
+    container: {
+      control: false,
+      description: 'Контейнер для портала',
+    },
+    BackdropComponent: {
+      control: false,
+      description: 'Компонент для backdrop',
+    },
+    BackdropProps: {
+      control: false,
+      description: 'Пропсы для компонента backdrop',
+    },
     onClose: {
       action: 'closed',
       description: 'Обработчик закрытия модального окна',
@@ -91,9 +115,9 @@ const ControlledModal = (args: any) => {
   const [open, setOpen] = useState(args.open || false);
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => {
+  const handleClose = (event?: any, reason?: string) => {
     setOpen(false);
-    args.onClose?.();
+    args.onClose?.(event || {}, reason as any);
   };
 
   return (
@@ -166,83 +190,19 @@ export const Default: Story = {
  * Простой модальный диалог
  */
 export const SimpleDialog: Story = {
-  render: (args) => <ControlledModal {...args} />,
-  args: {
-    children: (
-      <div style={simpleContentStyle}>
-        <h2 style={{ margin: '0 0 16px 0', color: '#333' }}>Confirm Action</h2>
-        <p style={{ margin: '0 0 24px 0', color: '#666' }}>
-          Are you sure you want to delete this item? This action cannot be
-          undone.
-        </p>
-        <div
-          style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}
-        >
-          <button
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#f5f5f5',
-              border: '1px solid #ddd',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Cancel
-          </button>
-          <button
-            style={{
-              padding: '8px 16px',
-              backgroundColor: '#d32f2f',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    ),
-  },
-};
+  render: (args) => {
+    const [open, setOpen] = useState(args.open || false);
 
-/**
- * Modal без backdrop
- */
-export const WithoutBackdrop: Story = {
-  render: (args) => <ControlledModal {...args} />,
-  args: {
-    backdrop: false,
-    children: (
-      <div style={simpleContentStyle}>
-        <h2 style={{ margin: '0 0 16px 0' }}>Modal without backdrop</h2>
-        <p style={{ margin: 0 }}>
-          This modal doesn't have a backdrop, so you can interact with the
-          content behind it.
-        </p>
-      </div>
-    ),
-  },
-};
+    const handleOpen = () => setOpen(true);
+    const handleClose = (event?: any, reason?: string) => {
+      setOpen(false);
+      args.onClose?.(event || {}, reason as any);
+    };
 
-/**
- * Modal с статичным backdrop (не закрывается при клике)
- */
-export const StaticBackdrop: Story = {
-  render: (args) => <ControlledModal {...args} />,
-  args: {
-    backdrop: 'static',
-    closeOnBackdropClick: false,
-    children: (
-      <div style={simpleContentStyle}>
-        <h2 style={{ margin: '0 0 16px 0' }}>Static backdrop</h2>
-        <p style={{ margin: '0 0 16px 0' }}>
-          This modal cannot be closed by clicking on the backdrop or pressing
-          Escape.
-        </p>
+    return (
+      <>
         <button
-          onClick={() => window.location.reload()}
+          onClick={handleOpen}
           style={{
             padding: '8px 16px',
             backgroundColor: '#1976d2',
@@ -252,10 +212,358 @@ export const StaticBackdrop: Story = {
             cursor: 'pointer',
           }}
         >
-          Close via button only
+          Open Confirm Dialog
         </button>
-      </div>
-    ),
+        <Modal {...args} open={open} onClose={handleClose}>
+          <div style={simpleContentStyle}>
+            <h2 style={{ margin: '0 0 16px 0', color: '#333' }}>
+              Confirm Action
+            </h2>
+            <p style={{ margin: '0 0 24px 0', color: '#666' }}>
+              Are you sure you want to delete this item? This action cannot be
+              undone.
+            </p>
+            <div
+              style={{
+                display: 'flex',
+                gap: '8px',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <button
+                onClick={handleClose}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#f5f5f5',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  alert('Item deleted!');
+                  handleClose();
+                }}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#d32f2f',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </Modal>
+      </>
+    );
+  },
+};
+
+/**
+ * Modal без backdrop
+ */
+export const WithoutBackdrop: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(args.open || false);
+    const [bgClickCount, setBgClickCount] = useState(0);
+    const [inputValue, setInputValue] = useState('');
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+      setOpen(false);
+      args.onClose?.({}, 'escapeKeyDown');
+    };
+
+    const handleBgClick = () => {
+      setBgClickCount((prev) => prev + 1);
+    };
+
+    const modalContentStyle = {
+      position: 'fixed' as const,
+      top: '20px',
+      right: '20px',
+      width: '320px',
+      backgroundColor: 'white',
+      padding: '24px',
+      borderRadius: '8px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+      border: '1px solid #e0e0e0',
+      zIndex: 1000,
+    };
+
+    return (
+      <>
+        <div
+          style={{
+            padding: '20px',
+            minHeight: '100vh',
+            backgroundColor: '#f5f5f5',
+          }}
+        >
+          <h1 style={{ marginBottom: '20px', color: '#333' }}>
+            Background Content
+          </h1>
+
+          <button
+            onClick={handleOpen}
+            style={{
+              padding: '12px 24px',
+              backgroundColor: '#1976d2',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              marginBottom: '20px',
+              fontSize: '16px',
+            }}
+          >
+            Open Modal without backdrop
+          </button>
+
+          <div
+            style={{
+              marginBottom: '20px',
+              padding: '20px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+            }}
+          >
+            <h3 style={{ marginTop: 0 }}>Interactive Elements Behind Modal:</h3>
+            <p>
+              You can interact with all these elements even when the modal is
+              open:
+            </p>
+
+            <div style={{ marginBottom: '16px' }}>
+              <button
+                onClick={handleBgClick}
+                style={{
+                  padding: '10px 16px',
+                  backgroundColor: '#2e7d32',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  marginRight: '10px',
+                  fontSize: '14px',
+                }}
+              >
+                Click Counter: {bgClickCount}
+              </button>
+
+              <button
+                onClick={() => alert('Background button clicked!')}
+                style={{
+                  padding: '10px 16px',
+                  backgroundColor: '#ed6c02',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                Show Alert
+              </button>
+            </div>
+
+            <div style={{ marginBottom: '16px' }}>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '4px',
+                  fontWeight: 'bold',
+                }}
+              >
+                Type something:
+              </label>
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="You can type here while modal is open"
+                style={{
+                  padding: '10px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  width: '300px',
+                  fontSize: '14px',
+                }}
+              />
+              <p
+                style={{ margin: '8px 0 0 0', fontSize: '12px', color: '#666' }}
+              >
+                Current value: "{inputValue}"
+              </p>
+            </div>
+
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  marginBottom: '4px',
+                  fontWeight: 'bold',
+                }}
+              >
+                Select an option:
+              </label>
+              <select
+                style={{
+                  padding: '8px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                }}
+              >
+                <option>Option 1</option>
+                <option>Option 2</option>
+                <option>Option 3</option>
+              </select>
+            </div>
+          </div>
+
+          <div
+            style={{
+              padding: '20px',
+              backgroundColor: 'white',
+              borderRadius: '8px',
+            }}
+          >
+            <h3 style={{ marginTop: 0 }}>Scrollable Content</h3>
+            <p>
+              This content demonstrates that you can scroll the page even with
+              the modal open:
+            </p>
+            {Array.from({ length: 20 }, (_, i) => (
+              <p key={i} style={{ marginBottom: '10px' }}>
+                Paragraph {i + 1}: Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua.
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <Modal {...args} open={open} onClose={handleClose}>
+          <div style={modalContentStyle}>
+            <h2
+              style={{ margin: '0 0 16px 0', fontSize: '18px', color: '#333' }}
+            >
+              Modal without backdrop
+            </h2>
+            <p
+              style={{
+                margin: '0 0 16px 0',
+                fontSize: '14px',
+                lineHeight: '1.5',
+              }}
+            >
+              This modal doesn't have a backdrop. You can:
+            </p>
+            <ul
+              style={{
+                margin: '0 0 16px 0',
+                paddingLeft: '20px',
+                fontSize: '14px',
+              }}
+            >
+              <li>Click buttons behind this modal</li>
+              <li>Type in input fields</li>
+              <li>Scroll the page</li>
+              <li>Interact with any element</li>
+            </ul>
+            <button
+              onClick={handleClose}
+              style={{
+                padding: '10px 16px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '14px',
+                width: '100%',
+              }}
+            >
+              Close Modal
+            </button>
+          </div>
+        </Modal>
+      </>
+    );
+  },
+  args: {
+    backdrop: false,
+    disableScrollLock: true, // Отключаем блокировку прокрутки
+    disableEnforceFocus: true, // Отключаем захват фокуса
+    disableAutoFocus: true, // Отключаем автофокус
+    disableRestoreFocus: true, // Отключаем восстановление фокуса
+  },
+};
+
+/**
+ * Modal с статичным backdrop (не закрывается при клике)
+ */
+export const StaticBackdrop: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(args.open || false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+      setOpen(false);
+      args.onClose?.({}, 'buttonClick' as any);
+    };
+
+    return (
+      <>
+        <button
+          onClick={handleOpen}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#1976d2',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Open Static Modal
+        </button>
+        <Modal {...args} open={open} onClose={handleClose}>
+          <div style={simpleContentStyle}>
+            <h2 style={{ margin: '0 0 16px 0' }}>Static backdrop</h2>
+            <p style={{ margin: '0 0 16px 0' }}>
+              This modal cannot be closed by clicking on the backdrop or
+              pressing Escape. Only the button below can close it.
+            </p>
+            <button
+              onClick={handleClose}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+              }}
+            >
+              Close Modal
+            </button>
+          </div>
+        </Modal>
+      </>
+    );
+  },
+  args: {
+    backdrop: 'static',
+    closeOnBackdropClick: false,
     closeOnEscape: false,
   },
 };
