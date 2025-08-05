@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Форматирование и линтинг через lint-staged
 npx lint-staged
 
