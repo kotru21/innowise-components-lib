@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SelectOption } from '../Select.types';
 import { Chip } from '../Chip';
 import styles from '../Select.module.css';
@@ -35,40 +35,35 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   shouldShrink = false,
   onChipDelete,
 }) => {
-  // Получаем отображаемое значение для одиночного режима
-  const getDisplayValue = (): string => {
-    if (!multiple) {
-      const option = options.find((opt) => opt.value === value);
-      if (option && option.value !== noneOptionValue) {
-        return option.label;
-      }
-
-      // Если лейбл есть и не поднят, не показываем никакого текста
-      if (label && !shouldShrink) {
-        return '';
-      }
-
-      return placeholder || '';
+  // Мемоизированное отображаемое значение для одиночного режима
+  const displayValue = useMemo((): string => {
+    if (multiple) return '';
+    const option = options.find((opt) => opt.value === value);
+    if (option && option.value !== noneOptionValue) {
+      return option.label;
     }
-    return '';
-  };
-
-  // Рендер чипов для множественного выбора
-  const renderChips = () => {
+    if (label && !shouldShrink) return '';
+    return placeholder || '';
+  }, [
+    multiple,
+    options,
+    value,
+    noneOptionValue,
+    label,
+    shouldShrink,
+    placeholder,
+  ]);
+  // Компонент списка чипов для множественного выбора
+  const ChipList: React.FC = () => {
     if (!multiple || !Array.isArray(value) || value.length === 0) {
-      // Если нет выбранных значений и лейбл не поднят, не показываем ничего
-      if (label && !shouldShrink) {
-        return '';
-      }
-      return placeholder || '';
+      if (label && !shouldShrink) return <></>;
+      return <>{placeholder || ''}</>;
     }
-
     return (
       <div className={styles.chipContainer}>
         {value.map((val) => {
           const option = options.find((opt) => opt.value === val);
           const chipLabel = option ? option.label : String(val);
-
           return (
             <Chip
               key={val}
@@ -81,7 +76,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
     );
   };
 
-  return <>{multiple ? renderChips() : getDisplayValue()}</>;
+  return <>{multiple ? <ChipList /> : displayValue}</>;
 };
 
 SelectInput.displayName = 'SelectInput';

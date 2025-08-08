@@ -19,13 +19,18 @@ export const Chip: React.FC<ChipProps> = ({ label, onDelete, className }) => (
     {onDelete && (
       <span
         className={styles.chipDeleteIcon}
-        onClick={onDelete}
         role="button"
         aria-label={`Удалить ${label}`}
         tabIndex={0}
+        onMouseDown={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onDelete();
+        }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            e.stopPropagation();
             onDelete();
           }
         }}

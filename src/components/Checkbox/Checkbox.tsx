@@ -3,6 +3,25 @@ import { CheckboxProps } from './Checkbox.types';
 import styles from './Checkbox.module.css';
 import { CheckIcon, IndeterminateIcon } from './icons';
 
+// Компонент иконки чекбокса, чтобы не вызывать renderX-функции
+const CheckboxIcon: React.FC<{
+  checked?: boolean;
+  indeterminate?: boolean;
+  icon?: React.ReactNode;
+  checkedIcon?: React.ReactNode;
+  indeterminateIcon?: React.ReactNode;
+}> = React.memo(
+  ({ checked, indeterminate, icon, checkedIcon, indeterminateIcon }) => {
+    if (indeterminate) {
+      return <>{indeterminateIcon || <IndeterminateIcon />}</>;
+    }
+    if (checked) {
+      return <>{checkedIcon || <CheckIcon />}</>;
+    }
+    return <>{icon || null}</>;
+  }
+);
+
 /**
  * Checkbox компонент - переиспользуемый чекбокс с различными состояниями
  *
@@ -97,21 +116,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         id,
       ]);
 
-    /**
-     * Функция для рендеринга иконки
-     */
-    const renderIcon = () => {
-      if (indeterminate) {
-        return indeterminateIcon || <IndeterminateIcon />;
-      }
-
-      if (checked) {
-        return checkedIcon || <CheckIcon />;
-      }
-
-      return icon || null;
-    };
-
     const checkboxId = memoCheckboxId;
 
     const checkboxElement = (
@@ -128,7 +132,15 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           {...inputProps}
           {...props}
         />
-        <span className={checkboxClasses}>{renderIcon()}</span>
+        <span className={checkboxClasses}>
+          <CheckboxIcon
+            checked={checked}
+            indeterminate={indeterminate}
+            icon={icon}
+            checkedIcon={checkedIcon}
+            indeterminateIcon={indeterminateIcon}
+          />
+        </span>
       </div>
     );
 
@@ -143,41 +155,6 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       <div className={styles.helperText}>{helperText}</div>
     );
 
-    // Определяем порядок элементов в зависимости от labelPlacement
-    const renderContent = () => {
-      switch (labelPlacement) {
-        case 'start':
-          return (
-            <>
-              {labelElement}
-              {checkboxElement}
-            </>
-          );
-        case 'top':
-          return (
-            <div className={styles.vertical}>
-              {labelElement}
-              {checkboxElement}
-            </div>
-          );
-        case 'bottom':
-          return (
-            <div className={styles.vertical}>
-              {checkboxElement}
-              {labelElement}
-            </div>
-          );
-        case 'end':
-        default:
-          return (
-            <>
-              {checkboxElement}
-              {labelElement}
-            </>
-          );
-      }
-    };
-
     if (!label) {
       return (
         <div className={containerClasses}>
@@ -189,7 +166,27 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <div className={containerClasses}>
-        {renderContent()}
+        {labelPlacement === 'top' ? (
+          <div className={styles.vertical}>
+            {labelElement}
+            {checkboxElement}
+          </div>
+        ) : labelPlacement === 'bottom' ? (
+          <div className={styles.vertical}>
+            {checkboxElement}
+            {labelElement}
+          </div>
+        ) : labelPlacement === 'start' ? (
+          <>
+            {labelElement}
+            {checkboxElement}
+          </>
+        ) : (
+          <>
+            {checkboxElement}
+            {labelElement}
+          </>
+        )}
         {helperElement}
       </div>
     );

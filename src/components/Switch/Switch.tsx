@@ -2,6 +2,55 @@ import React, { forwardRef, useMemo } from 'react';
 import { SwitchProps } from './Switch.types';
 import styles from './Switch.module.css';
 
+// Отдельные компоненты, вынесенные на уровень модуля (стабильная идентичность между рендерами)
+type SwitchControlProps = React.InputHTMLAttributes<HTMLInputElement> & {
+  wrapperClassName: string;
+};
+
+const SwitchControl = React.memo(
+  forwardRef<HTMLInputElement, SwitchControlProps>(
+    (
+      { wrapperClassName, id, checked, disabled, onChange, ...inputProps },
+      controlRef
+    ) => (
+      <label className={wrapperClassName}>
+        <input
+          ref={controlRef}
+          type="checkbox"
+          checked={!!checked}
+          onChange={onChange}
+          disabled={!!disabled}
+          className={styles.input}
+          id={id}
+          {...inputProps}
+        />
+        <span className={styles.track}>
+          <span className={styles.thumb} />
+        </span>
+      </label>
+    )
+  )
+);
+
+const SwitchLabel: React.FC<{ label?: React.ReactNode }> = React.memo(
+  ({ label }) => {
+    if (!label) return null;
+    return <span className={styles.label}>{label}</span>;
+  }
+);
+
+const HelperText: React.FC<{ helperText?: React.ReactNode; error?: boolean }> =
+  React.memo(({ helperText, error }) => {
+    if (!helperText) return null;
+    return (
+      <div
+        className={`${styles.helperText} ${error ? styles['helperText--error'] : ''}`}
+      >
+        {helperText}
+      </div>
+    );
+  });
+
 /**
  * Switch компонент - переиспользуемый переключатель для включения/выключения настроек
  *
@@ -28,13 +77,11 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       labelPlacement = 'end',
       className = '',
       id,
-      ...props
+      ...restProps
     },
     ref
   ) => {
-    /**
-     * Функция для генерации CSS классов на основе props
-     */
+    // Классы переключателя
     const switchClassName = useMemo((): string => {
       const classes = [styles.switch];
 
@@ -64,78 +111,49 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       return classes.join(' ');
     }, [size, checked, error, color, disabled, className]);
 
-    /**
-     * Функция для генерации CSS классов контейнера с учетом расположения ярлыка
-     */
+    // Классы контейнера
     const containerClassName = useMemo((): string => {
       const classes = [styles.container];
-
       if (labelPlacement) {
         classes.push(styles[`container--${labelPlacement}`]);
       }
-
       return classes.join(' ');
     }, [labelPlacement]);
 
-    /**
-     * Рендерит переключатель
-     */
-    const renderSwitch = () => (
-      <label className={switchClassName}>
-        <input
+    // Если нет ярлыка и вспомогательного текста, возвращаем только переключатель
+    if (!label && !helperText) {
+      return (
+        <SwitchControl
           ref={ref}
-          type="checkbox"
+          wrapperClassName={switchClassName}
           checked={checked}
           onChange={onChange}
           disabled={disabled}
-          className={styles.input}
           id={id}
-          {...props}
+          {...restProps}
         />
-        <span className={styles.track}>
-          <span className={styles.thumb} />
-        </span>
-      </label>
-    );
-
-    /**
-     * Рендерит ярлык
-     */
-    const renderLabel = () => {
-      if (!label) return null;
-
-      return <span className={styles.label}>{label}</span>;
-    };
-
-    /**
-     * Рендерит вспомогательный текст
-     */
-    const renderHelperText = () => {
-      if (!helperText) return null;
-
-      return (
-        <div
-          className={`${styles.helperText} ${error ? styles['helperText--error'] : ''}`}
-        >
-          {helperText}
-        </div>
       );
-    };
-
-    // Если нет ярлыка и вспомогательного текста, возвращаем только переключатель
-    if (!label && !helperText) {
-      return renderSwitch();
     }
 
     // Возвращаем полную структуру с ярлыком и вспомогательным текстом
     return (
       <div className={containerClassName}>
-        {(labelPlacement === 'start' || labelPlacement === 'top') &&
-          renderLabel()}
-        {renderSwitch()}
-        {(labelPlacement === 'end' || labelPlacement === 'bottom') &&
-          renderLabel()}
-        {renderHelperText()}
+        {(labelPlacement === 'start' || labelPlacement === 'top') && (
+          <SwitchLabel label={label} />
+        )}
+        <SwitchControl
+          ref={ref}
+          wrapperClassName={switchClassName}
+          checked={checked}
+          onChange={onChange}
+          disabled={disabled}
+          id={id}
+          {...restProps}
+        />
+        {(labelPlacement === 'end' || labelPlacement === 'bottom') && (
+          <SwitchLabel label={label} />
+        )}
+        <HelperText helperText={helperText} error={error} />
       </div>
     );
   }
