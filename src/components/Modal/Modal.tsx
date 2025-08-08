@@ -44,9 +44,8 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     const modalRef = useRef<HTMLDivElement>(null);
     const backdropRef = useRef<HTMLDivElement>(null);
     const lastFocusedElement = useRef<HTMLElement | null>(null);
-    const isUnmountedRef = useRef(false);
 
-    // Получаем контейнер для портала
+    // контейнер для портала
     const getContainer = useCallback(() => {
       if (disablePortal) return null;
       if (container) {
@@ -55,7 +54,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       return document.body;
     }, [container, disablePortal]);
 
-    // Обработчик закрытия модального окна
     const handleClose = useCallback(
       (event: any, reason: 'backdropClick' | 'escapeKeyDown') => {
         if (onClose) {
@@ -65,7 +63,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       [onClose]
     );
 
-    // Обработчик клика на backdrop
     const handleBackdropClick = useCallback(
       (event: React.MouseEvent) => {
         if (event.target === event.currentTarget && closeOnBackdropClick) {
@@ -75,7 +72,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       [closeOnBackdropClick, handleClose]
     );
 
-    // Обработчик нажатия клавиш
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
         if (!open || event.key !== 'Escape' || !closeOnEscape) return;
@@ -86,7 +82,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       [open, closeOnEscape, handleClose]
     );
 
-    // Управление фокусом
     const handleFocus = useCallback(() => {
       if (disableEnforceFocus || !modalRef.current) return;
 
@@ -105,65 +100,39 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       }
     }, [disableEnforceFocus]);
 
-    // Эффект для управления модальным окном при открытии/закрытии
     useEffect(() => {
-      if (open) {
-        // Сохраняем текущий активный элемент
-        if (!disableRestoreFocus) {
-          lastFocusedElement.current = document.activeElement as HTMLElement;
-        }
+      if (!open) return;
 
-        // Блокируем прокрутку
-        if (!disableScrollLock) {
-          document.body.style.overflow = 'hidden';
-        }
+      if (!disableRestoreFocus) {
+        lastFocusedElement.current = document.activeElement as HTMLElement;
+      }
 
-        // Добавляем обработчик клавиш
-        document.addEventListener('keydown', handleKeyDown);
+      if (!disableScrollLock) {
+        document.body.style.overflow = 'hidden';
+      }
 
-        // Устанавливаем фокус
-        if (!disableAutoFocus) {
-          setTimeout(() => handleFocus(), 0);
-        }
+      document.addEventListener('keydown', handleKeyDown);
+      if (!disableEnforceFocus) {
+        document.addEventListener('focusin', handleFocus);
+      }
 
-        // Добавляем обработчик для перехвата фокуса
-        if (!disableEnforceFocus) {
-          document.addEventListener('focusin', handleFocus);
-        }
+      if (!disableAutoFocus) {
+        setTimeout(() => handleFocus(), 0);
+      }
 
-        // Вызываем onEnter
-        if (onEnter) {
-          onEnter();
-        }
-      } else {
-        // Восстанавливаем прокрутку
+      onEnter?.();
+
+      return () => {
         if (!disableScrollLock) {
           document.body.style.overflow = '';
         }
-
-        // Удаляем обработчики
         document.removeEventListener('keydown', handleKeyDown);
         document.removeEventListener('focusin', handleFocus);
-
-        // Восстанавливаем фокус
         if (!disableRestoreFocus && lastFocusedElement.current) {
           lastFocusedElement.current.focus();
           lastFocusedElement.current = null;
         }
-
-        // Вызываем onExited
-        if (onExited) {
-          onExited();
-        }
-      }
-
-      return () => {
-        // Cleanup при размонтировании
-        if (!isUnmountedRef.current) {
-          document.body.style.overflow = '';
-          document.removeEventListener('keydown', handleKeyDown);
-          document.removeEventListener('focusin', handleFocus);
-        }
+        onExited?.();
       };
     }, [
       open,
@@ -177,14 +146,6 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
       onExited,
     ]);
 
-    // Cleanup при размонтировании
-    useEffect(() => {
-      return () => {
-        isUnmountedRef.current = true;
-      };
-    }, []);
-
-    // Функция рендера содержимого модального окна
     const renderModal = () => {
       if (!open && !keepMounted) {
         return null;
