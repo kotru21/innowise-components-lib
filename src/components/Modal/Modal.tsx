@@ -78,12 +78,12 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     // Обработчик нажатия клавиш
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (event.key === 'Escape' && closeOnEscape) {
-          event.stopPropagation();
-          handleClose(event, 'escapeKeyDown');
-        }
+        if (!open || event.key !== 'Escape' || !closeOnEscape) return;
+
+        event.stopPropagation();
+        handleClose(event, 'escapeKeyDown');
       },
-      [closeOnEscape, handleClose]
+      [open, closeOnEscape, handleClose]
     );
 
     // Управление фокусом

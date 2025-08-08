@@ -3,7 +3,6 @@ import { CheckboxProps } from './Checkbox.types';
 import styles from './Checkbox.module.css';
 import { CheckIcon, IndeterminateIcon } from './icons';
 
-// Компонент иконки чекбокса, чтобы не вызывать renderX-функции
 const CheckboxIcon: React.FC<{
   checked?: boolean;
   indeterminate?: boolean;
@@ -69,7 +68,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }, [indeterminate, finalRef]);
 
     /**
-     * Вычисляем все производные значения за один проход
+     * все производные значения за один проход
      */
     const { containerClasses, checkboxClasses, labelClasses, memoCheckboxId } =
       useMemo(() => {
