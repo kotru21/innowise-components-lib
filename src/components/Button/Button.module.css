@@ -1,0 +1,257 @@
+/* Базовые стили для всех кнопок */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  
+  /* Убираем стандартные браузерные стили */
+  outline: 0;
+  border: 0;
+  margin: 0;
+  
+  /* Стилизация */
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  text-decoration: none;
+  
+  /* Типографика */
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  
+  /* Анимации */
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+.button:hover {
+  text-decoration: none;
+}
+
+.button:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* === РАЗМЕРЫ === */
+.small {
+  padding: 4px 10px;
+  font-size: 0.8125rem;
+  min-width: 64px;
+}
+
+.medium {
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  min-width: 64px;
+}
+
+.large {
+  padding: 8px 22px;
+  font-size: 0.9375rem;
+  min-width: 64px;
+}
+
+/* === ВАРИАНТ: TEXT === */
+.text {
+  background-color: transparent;
+  border: 1px solid transparent;
+}
+
+.textPrimary {
+  color: #1976d2;
+}
+
+.textPrimary:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+}
+
+.textSecondary {
+  color: #dc004e;
+}
+
+.textSecondary:hover {
+  background-color: rgba(220, 0, 78, 0.04);
+}
+
+.textError {
+  color: #d32f2f;
+}
+
+.textError:hover {
+  background-color: rgba(211, 47, 47, 0.04);
+}
+
+.textWarning {
+  color: #ed6c02;
+}
+
+.textWarning:hover {
+  background-color: rgba(237, 108, 2, 0.04);
+}
+
+.textInfo {
+  color: #0288d1;
+}
+
+.textInfo:hover {
+  background-color: rgba(2, 136, 209, 0.04);
+}
+
+.textSuccess {
+  color: #2e7d32;
+}
+
+.textSuccess:hover {
+  background-color: rgba(46, 125, 50, 0.04);
+}
+
+.text:disabled {
+  color: rgba(0, 0, 0, 0.26);
+}
+
+/* === ВАРИАНТ: CONTAINED === */
+.contained {
+  color: #fff;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),
+              0px 2px 2px 0px rgba(0,0,0,0.14),
+              0px 1px 5px 0px rgba(0,0,0,0.12);
+}
+
+.contained:hover {
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),
+              0px 4px 5px 0px rgba(0,0,0,0.14),
+              0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+.containedPrimary {
+  background-color: #1976d2;
+}
+
+.containedPrimary:hover {
+  background-color: #1565c0;
+}
+
+.containedSecondary {
+  background-color: #dc004e;
+}
+
+.containedSecondary:hover {
+  background-color: #c51162;
+}
+
+.containedError {
+  background-color: #d32f2f;
+}
+
+.containedError:hover {
+  background-color: #c62828;
+}
+
+.containedWarning {
+  background-color: #ed6c02;
+}
+
+.containedWarning:hover {
+  background-color: #e65100;
+}
+
+.containedInfo {
+  background-color: #0288d1;
+}
+
+.containedInfo:hover {
+  background-color: #0277bd;
+}
+
+.containedSuccess {
+  background-color: #2e7d32;
+}
+
+.containedSuccess:hover {
+  background-color: #1b5e20;
+}
+
+.contained:disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+/* === ВАРИАНТ: OUTLINED === */
+.outlined {
+  background-color: transparent;
+}
+
+.outlinedPrimary {
+  color: #1976d2;
+  border: 1px solid rgba(25, 118, 210, 0.5);
+}
+
+.outlinedPrimary:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+  border-color: #1976d2;
+}
+
+.outlinedSecondary {
+  color: #dc004e;
+  border: 1px solid rgba(220, 0, 78, 0.5);
+}
+
+.outlinedSecondary:hover {
+  background-color: rgba(220, 0, 78, 0.04);
+  border-color: #dc004e;
+}
+
+.outlinedError {
+  color: #d32f2f;
+  border: 1px solid rgba(211, 47, 47, 0.5);
+}
+
+.outlinedError:hover {
+  background-color: rgba(211, 47, 47, 0.04);
+  border-color: #d32f2f;
+}
+
+.outlinedWarning {
+  color: #ed6c02;
+  border: 1px solid rgba(237, 108, 2, 0.5);
+}
+
+.outlinedWarning:hover {
+  background-color: rgba(237, 108, 2, 0.04);
+  border-color: #ed6c02;
+}
+
+.outlinedInfo {
+  color: #0288d1;
+  border: 1px solid rgba(2, 136, 209, 0.5);
+}
+
+.outlinedInfo:hover {
+  background-color: rgba(2, 136, 209, 0.04);
+  border-color: #0288d1;
+}
+
+.outlinedSuccess {
+  color: #2e7d32;
+  border: 1px solid rgba(46, 125, 50, 0.5);
+}
+
+.outlinedSuccess:hover {
+  background-color: rgba(46, 125, 50, 0.04);
+  border-color: #2e7d32;
+}
+
+.outlined:disabled {
+  color: rgba(0, 0, 0, 0.26);
+  border-color: rgba(0, 0, 0, 0.12);
+}

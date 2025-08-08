@@ -1,0 +1,299 @@
+/* Switch Container */
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: row;
+}
+
+.container--start {
+  flex-direction: row-reverse;
+}
+
+.container--end {
+  flex-direction: row;
+}
+
+.container--top {
+  flex-direction: column-reverse;
+  align-items: flex-start;
+}
+
+.container--bottom {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Switch Base */
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.switch--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Hidden Input */
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Track (фон переключателя) */
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  background-color: rgba(0, 0, 0, 0.38);
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Thumb (ползунок) */
+.thumb {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+/* Small Size */
+.switch--small .track {
+  width: 28px;
+  height: 16px;
+}
+
+.switch--small .thumb {
+  width: 12px;
+  height: 12px;
+  left: 2px;
+  top: 2px;
+}
+
+.switch--small .input:checked + .track .thumb {
+  transform: translateX(12px);
+}
+
+.switch--small .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 6px rgba(25, 118, 210, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Medium Size (Default) */
+.switch--medium .track {
+  width: 34px;
+  height: 20px;
+}
+
+.switch--medium .thumb {
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+}
+
+.switch--medium .input:checked + .track .thumb {
+  transform: translateX(14px);
+}
+
+.switch--medium .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(25, 118, 210, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Large Size */
+.switch--large .track {
+  width: 40px;
+  height: 24px;
+}
+
+.switch--large .thumb {
+  width: 20px;
+  height: 20px;
+  left: 2px;
+  top: 2px;
+}
+
+.switch--large .input:checked + .track .thumb {
+  transform: translateX(16px);
+}
+
+.switch--large .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 10px rgba(25, 118, 210, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Primary */
+.switch--primary .input:checked + .track {
+  background-color: #1976d2;
+}
+
+.switch--primary .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(25, 118, 210, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Secondary */
+.switch--secondary .input:checked + .track {
+  background-color: #dc004e;
+}
+
+.switch--secondary .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(220, 0, 78, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Error */
+.switch--error .input:checked + .track,
+.switch--error .track {
+  background-color: #d32f2f !important;
+}
+
+.switch--error .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(211, 47, 47, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Warning */
+.switch--warning .input:checked + .track {
+  background-color: #ed6c02;
+}
+
+.switch--warning .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(237, 108, 2, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Info */
+.switch--info .input:checked + .track {
+  background-color: #0288d1;
+}
+
+.switch--info .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(2, 136, 209, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Color Variants - Success */
+.switch--success .input:checked + .track {
+  background-color: #2e7d32;
+}
+
+.switch--success .input:focus + .track .thumb {
+  box-shadow:
+    0 0 0 8px rgba(46, 125, 50, 0.12),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Disabled State */
+.switch--disabled .track {
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.switch--disabled .thumb {
+  background-color: #fafafa !important;
+}
+
+/* Hover Effect */
+.switch:not(.switch--disabled):hover .thumb {
+  box-shadow:
+    0 0 0 8px rgba(0, 0, 0, 0.04),
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Active/Pressed State */
+.switch:not(.switch--disabled):active .thumb {
+  transform: scale(1.1);
+}
+
+.switch:not(.switch--disabled).switch--small:active
+  .input:checked
+  + .track
+  .thumb {
+  transform: translateX(12px) scale(1.1);
+}
+
+.switch:not(.switch--disabled).switch--medium:active
+  .input:checked
+  + .track
+  .thumb {
+  transform: translateX(14px) scale(1.1);
+}
+
+.switch:not(.switch--disabled).switch--large:active
+  .input:checked
+  + .track
+  .thumb {
+  transform: translateX(16px) scale(1.1);
+}
+
+/* Label */
+.label {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  color: rgba(0, 0, 0, 0.87);
+  cursor: pointer;
+}
+
+/* Helper Text */
+.helperText {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.66;
+  letter-spacing: 0.03333em;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 3px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.helperText--error {
+  color: #d32f2f;
+}
