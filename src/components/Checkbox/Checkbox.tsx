@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useEffect } from 'react';
+import React, { forwardRef, useRef, useEffect, useMemo } from 'react';
 import { CheckboxProps } from './Checkbox.types';
 import styles from './Checkbox.module.css';
 import { CheckIcon, IndeterminateIcon } from './icons';
@@ -52,7 +52,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     /**
      * Функция для генерации CSS классов для контейнера
      */
-    const getContainerClasses = () => {
+    const containerClassName = useMemo(() => {
       const classes = [styles.container];
 
       classes.push(styles[`placement-${labelPlacement}`]);
@@ -70,12 +70,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [labelPlacement, disabled, error, className]);
 
     /**
      * Функция для генерации CSS классов для чекбокса
      */
-    const getCheckboxClasses = () => {
+    const checkboxClassName = useMemo(() => {
       const classes = [styles.checkbox];
 
       // класс размера
@@ -94,12 +94,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [size, error, color, checked, indeterminate]);
 
     /**
      * Функция для генерации CSS классов для ярлыка
      */
-    const getLabelClasses = () => {
+    const labelClassName = useMemo(() => {
       const classes = [styles.label];
 
       classes.push(styles[`label-${size}`]);
@@ -109,7 +109,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [size, required]);
 
     /**
      * Функция для рендеринга иконки
@@ -126,8 +126,10 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       return icon || null;
     };
 
-    const checkboxId =
-      id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+    const checkboxId = useMemo(
+      () => id || `checkbox-${Math.random().toString(36).substr(2, 9)}`,
+      [id]
+    );
 
     const checkboxElement = (
       <div className={styles.checkboxContainer}>
@@ -143,12 +145,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           {...inputProps}
           {...props}
         />
-        <span className={getCheckboxClasses()}>{renderIcon()}</span>
+        <span className={checkboxClassName}>{renderIcon()}</span>
       </div>
     );
 
     const labelElement = label && (
-      <label htmlFor={checkboxId} className={getLabelClasses()}>
+      <label htmlFor={checkboxId} className={labelClassName}>
         {label}
         {required && <span className={styles.asterisk}>*</span>}
       </label>
@@ -195,7 +197,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     if (!label) {
       return (
-        <div className={getContainerClasses()}>
+        <div className={containerClassName}>
           {checkboxElement}
           {helperElement}
         </div>
@@ -203,7 +205,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }
 
     return (
-      <div className={getContainerClasses()}>
+      <div className={containerClassName}>
         {renderContent()}
         {helperElement}
       </div>

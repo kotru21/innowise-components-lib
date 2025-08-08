@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { SwitchProps } from './Switch.types';
 import styles from './Switch.module.css';
 
@@ -35,7 +35,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     /**
      * Функция для генерации CSS классов на основе props
      */
-    const getSwitchClasses = (): string => {
+    const switchClassName = useMemo((): string => {
       const classes = [styles.switch];
 
       // Размер
@@ -62,12 +62,12 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [size, checked, error, color, disabled, className]);
 
     /**
      * Функция для генерации CSS классов контейнера с учетом расположения ярлыка
      */
-    const getContainerClasses = (): string => {
+    const containerClassName = useMemo((): string => {
       const classes = [styles.container];
 
       if (labelPlacement) {
@@ -75,13 +75,13 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [labelPlacement]);
 
     /**
      * Рендерит переключатель
      */
     const renderSwitch = () => (
-      <label className={getSwitchClasses()}>
+      <label className={switchClassName}>
         <input
           ref={ref}
           type="checkbox"
@@ -129,7 +129,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
     // Возвращаем полную структуру с ярлыком и вспомогательным текстом
     return (
-      <div className={getContainerClasses()}>
+      <div className={containerClassName}>
         {(labelPlacement === 'start' || labelPlacement === 'top') &&
           renderLabel()}
         {renderSwitch()}

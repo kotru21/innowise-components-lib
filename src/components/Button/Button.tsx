@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { ButtonProps } from './Button.types';
 import styles from './Button.module.css';
 
@@ -28,7 +28,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     /**
      * Функция для генерации CSS классов на основе props
      */
-    const getButtonClasses = () => {
+    const buttonClassName = useMemo(() => {
       const classes = [styles.button];
 
       // класс размера
@@ -48,12 +48,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
 
       return classes.join(' ');
-    };
+    }, [size, variant, color, className]);
 
     return (
       <button
         ref={ref}
-        className={getButtonClasses()}
+        className={buttonClassName}
         disabled={disabled}
         {...props}
       >
